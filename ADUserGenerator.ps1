@@ -5,20 +5,21 @@ function ADUser-Generation {
         [string] $Company,
         [parameter(Mandatory=$false,HelpMessage="Please enter the name of the OU you want to place your users. (Default: 'Staff')")] 
         [string] $OU,
-        [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default:727)")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default: '727'")]
         [ValidateRange(001,999)] 
         [string] $AreaCode,
-        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max:1500)")] 
-        [ValidateRange(1,1500)] 
+        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1000)")] 
+        [ValidateRange(1,1000)] 
         [int] $UserCount,
-        [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1')")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1'")]
         [String] $Password
     )
 
 
 Import-Module ActiveDirectory
-$ADRootDN = (Get-ADDomain -Current LocalComputer).DistinguishedName
-$DNSRoot = ((Get-ADDomain -Current LocalComputer).DNSRoot).Substring($DNSRoot.IndexOf('.') + 1)
+$ADDomain = Get-ADDomain -Current LocalComputer
+$ADRootDN = [string]($ADDomain.DistinguishedName)
+$DNSRoot  = [string]($ADDomain.DNSRoot).Substring($ADDomain.DNSRoot.IndexOf('.') +1)
 
     if (!($OU)) {$OU = 'Staff'}
 
@@ -139,4 +140,3 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
     }
 }
 }
-
