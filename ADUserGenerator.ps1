@@ -1,16 +1,16 @@
 function ADUser-Generation {
 
     param(
-        [parameter(Mandatory=$true,HelpMessage="Please enter Company name.")]
+        [parameter(Mandatory=$true,HelpMessage="Please enter Company name.")] 
         [string] $Company,
-        [parameter(Mandatory=$false,HelpMessage="Please enter the name of the OU you want to place your users. (Default: 'Staff')")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter the name of the OU you want to place your users. (Default: 'Staff')")] 
         [string] $OU,
         [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default: '727'")]
-        [ValidateRange(001,999)]
+        [ValidateRange(001,999)] 
         [string] $AreaCode,
-        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1000)")]
-        [ValidateRange(1,1000)]
-        [int] $usercount,
+        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1000)")] 
+        [ValidateRange(1,1000)] 
+        [int] $UserCount,
         [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1'")]
         [String] $Password
     )
@@ -59,24 +59,23 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
 ###################
 
 # Define how many users you want to generate
-    if (!($usercount)) {$usercount = 15}
+    if (!($UserCount)) {$UserCount = 15}
 
 # User generation : Names
-    $firstNameFile = "Firstnames.txt"
-    $lastNameFile = "Lastnames.txt"
-        $firstNames = Import-CSV $firstNameFile -Encoding utf7
-        $lastNames = Import-CSV $lastNameFile -Encoding utf7
+    $FirstNames = (Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/FirstNames.csv").content | ConvertFrom-Csv -Delim ',' -Header 'FirstName'  
+    $LastNames = (Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/LastNames.csv").content | ConvertFrom-Csv -Delim ',' -Header 'LastName'
 
     $CSV_Fname = New-Object System.Collections.ArrayList
     $CSV_Lname = New-Object System.Collections.ArrayList
-        $CSV_Fname.Add($firstNames)
-        $CSV_Lname.Add($lastNames)
+        
+    $CSV_Fname.Add($FirstNames)
+    $CSV_Lname.Add($LastNames)
 
     $i = 0
     Write-Host "AD Account generation started. Attempting to create $usercount accounts..." -ForegroundColor Yellow
     if ($i -lt $usercount) {
-        foreach ($firstname in $firstNames) {
-            foreach ($lastname in $lastnames) {
+        foreach ($FirstName in $FirstNames) {
+            foreach ($LastName in $LastNames) {
                 $First = ($CSV_Fname | Get-Random).FirstName
                 $Last = ($CSV_Lname | Get-Random).LastName
                 $Fname = (Get-Culture).TextInfo.ToTitleCase($First)
@@ -129,8 +128,8 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
         "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber"
             $i = $i+1
             if ($i -ge $usercount) {
-                Write-Host "USER GENERATION COMPLETE!! AD Accounts created: $usercount." -ForegroundColor Green
-                if ($usercount -eq 15) {
+                Write-Host "USER GENERATION COMPLETE!! AD Accounts created: $UserCount." -ForegroundColor Green
+                if ($UserCount -eq 15) {
                     Write-Host "If you need more (or less than) than 15 users, then please re-run & use the -UserCount parameter, like this...`n`n ADUser-Generation -Company MyCompany -UserCount 500" -ForegroundColor Yellow
                     Exit
                 }
@@ -140,3 +139,6 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
         }
 }
 }
+
+
+ADUser-Generation -Company Enigma -UserCount 250
