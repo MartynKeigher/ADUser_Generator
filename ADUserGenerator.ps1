@@ -18,7 +18,7 @@ function ADUser-Generation {
 
 Import-Module ActiveDirectory
 $ADRootDN = (Get-ADDomain -Current LocalComputer).DistinguishedName
-$DNSRoot = ((Get-ADDomain -Current LocalComputer).DNSRoot).Substring($x.IndexOf('.') + 1)
+$DNSRoot = ((Get-ADDomain -Current LocalComputer).DNSRoot).Substring($DNSRoot.IndexOf('.') + 1)
 
     if (!($OU)) {$OU = 'Staff'}
 
