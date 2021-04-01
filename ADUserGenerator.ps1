@@ -5,13 +5,13 @@ function ADUser-Generation {
         [string] $Company,
         [parameter(Mandatory=$false,HelpMessage="Please enter the name of the OU you want to place your users. (Default: 'Staff')")] 
         [string] $OU,
-        [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default: '727'")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default:727)")]
         [ValidateRange(001,999)] 
         [string] $AreaCode,
-        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1000)")] 
-        [ValidateRange(1,1000)] 
+        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max:1500)")] 
+        [ValidateRange(1,1500)] 
         [int] $UserCount,
-        [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1'")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1')")]
         [String] $Password
     )
 
@@ -135,10 +135,8 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
                 }
                 ELSE {Exit}
             }
-        }
-        }
+    }
+    }
 }
 }
 
-
-ADUser-Generation -Company Enigma -UserCount 250
