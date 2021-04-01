@@ -140,6 +140,3 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
         }
 }
 }
-
-
-ADUser-Generation
