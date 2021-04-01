@@ -4,7 +4,7 @@ Hi! The purpose of this repo is to generate a large amount of AD Users for testi
 
 
 ## How to use
-```
+```powershell
 iex (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/ADUserGenerator.ps1'); ADUser-Generation -Company 'MyCompany'
 ```
 
@@ -24,4 +24,5 @@ Retrieved from files in this repo, I'll update them from time to time, but not m
 
 
 *Enjoy!! 
+
 ://mk*
