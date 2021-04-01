@@ -23,6 +23,6 @@ Retrieved from files in this repo, I'll update them from time to time, but not m
  - LastNames.csv
 
 
-*Enjoy!
+Enjoy!
 
-*://mk
+://mk
