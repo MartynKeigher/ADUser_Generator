@@ -136,7 +136,7 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
             if ($i -ge $usercount) {
                 Write-Host "AD USER GENERATION COMPLETE!!`n$UserCount AD User accounts created, in the '$OU' OU." -ForegroundColor Green
                 if ($UserCount -eq 15) {
-                    Write-Host "If you need more (or less than) than 15 users, then please re-run & use the -UserCount parameter, like this...`n`n ADUser-Generation -Company MyCompany -UserCount 500" -ForegroundColor Yellow
+                    Write-Host "If you need more (or less) than 15 users, then please re-run & use the -UserCount parameter, like this...`n`n ADUser-Generation -Company MyCompany -UserCount 500" -ForegroundColor Yellow
                     Exit
                 }
                 ELSE {Exit}
