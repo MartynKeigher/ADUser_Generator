@@ -100,7 +100,6 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
    $title = $departments[$departmentIndex].Positions[$(Get-Random -Minimum 0 -Maximum $departments[$departmentIndex].Positions.Count)]
 
 # User generation : Phone Number
-   
    $pn2 = Get-Random -Minimum 101 -Maximum 995
    $pn3 = "{0:0000}" -f  (Get-Random -Minimum 50 -Maximum 9995)
    $phonenumber = "($areacode) $pn2-$pn3"
