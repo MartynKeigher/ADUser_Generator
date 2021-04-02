@@ -29,7 +29,7 @@ $DNSRoot  = [string]($ADDomain.DNSRoot).Substring($ADDomain.DNSRoot.IndexOf('.')
 
 $WorkingOU = "OU=$OU,$ADRootDN"
 
-## Delete previous attempt
+## Delete existing data to make way for new users
 Remove-ADOrganizationalUnit -Identity $WorkingOU -Recursive -Confirm:$False -ea 0 -wa 0 -infa 0
 
 
