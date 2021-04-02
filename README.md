@@ -5,7 +5,7 @@ Hi! The purpose of this repo is to generate a large amount of AD Users for testi
 
 ## How to use
 ```powershell
-iex (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/ADUserGenerator.ps1'); ADUser-Generation -Company 'MyCompany' -UserCount 300
+iex (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/ADUserGenerator.ps1'); ADUser-Generation -Company 'MyCompany'
 ```
 
 ## Available Parameters
