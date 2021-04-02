@@ -127,7 +127,8 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
 #######################
 
 # Generate users
-    New-ADUser -AccountPassword $securePassword -Company $company -Department $department -DisplayName $displayName -EmailAddress "$sAMAccountName@$DNSRoot" -Enabled $true -GivenName $Fname -Name $displayName -OfficePhone $phonenumber -Path $WorkingOU -SamAccountName $sAMAccountName -Surname $Lname -Title $title -UserPrincipalName "$sAMAccountName@$DNSRoot"
+    $ADAccountState = (Get-Random -InputObject ([bool]$True,[bool]$False))
+    New-ADUser -AccountPassword $securePassword -Company $company -Department $department -DisplayName $displayName -EmailAddress "$sAMAccountName@$DNSRoot" -Enabled $ADAccountState -GivenName $Fname -Name $displayName -OfficePhone $phonenumber -Path $WorkingOU -SamAccountName $sAMAccountName -Surname $Lname -Title $title -UserPrincipalName "$sAMAccountName@$DNSRoot"
     Get-ADUser -Filter {Department -eq $department} -Properties Department |  Move-ADObject  -TargetPath "OU=$department,$WorkingOU"
 
         "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber"
