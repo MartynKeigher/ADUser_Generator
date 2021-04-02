@@ -15,6 +15,10 @@ function ADUser-Generation {
         [String] $Password
     )
 
+# Check to see if we are on an Active Directory Server...
+if(!(get-windowsfeature | ?{$_.Name -eq 'AD-Domain-Services' -and $_.Installstate -eq 'Installed'})){
+    Write-Host "This script need to be run on an AD server. No changes have been made!" -ForegroundColor Cyan}
+        ELSE {
 
 Import-Module ActiveDirectory
 $ADDomain = Get-ADDomain -Current LocalComputer
@@ -129,7 +133,7 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
         "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber"
             $i = $i+1
             if ($i -ge $usercount) {
-                Write-Host "USER GENERATION COMPLETE!! AD Accounts created: $UserCount." -ForegroundColor Green
+                Write-Host "AD USER GENERATION COMPLETE!!`n$UserCount AD User accounts created, in the '$OU' OU." -ForegroundColor Green
                 if ($UserCount -eq 15) {
                     Write-Host "If you need more (or less than) than 15 users, then please re-run & use the -UserCount parameter, like this...`n`n ADUser-Generation -Company MyCompany -UserCount 500" -ForegroundColor Yellow
                     Exit
@@ -138,5 +142,6 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
             }
     }
     }
+}
 }
 }
