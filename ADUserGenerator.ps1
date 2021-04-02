@@ -21,10 +21,10 @@ if(!(get-windowsfeature | ?{$_.Name -eq 'AD-Domain-Services' -and $_.Installstat
         ELSE {
 
 Import-Module ActiveDirectory
-$ADDomain = Get-ADDomain -Current LocalComputer
-$ADRootDN = [string]($ADDomain.DistinguishedName)
-$DNSRoot  = [string]($ADDomain.DNSRoot).Substring($ADDomain.DNSRoot.IndexOf('.') +1)
-$WorkingOU = "OU=$OU,$ADRootDN"
+    $ADDomain = Get-ADDomain -Current LocalComputer
+    $ADRootDN = [string]($ADDomain.DistinguishedName)
+    $DNSRoot  = [string]($ADDomain.DNSRoot).Substring($ADDomain.DNSRoot.IndexOf('.') +1)
+    $WorkingOU = "OU=$OU,$ADRootDN"
 
 ## Delete previous attempt
 Remove-ADOrganizationalUnit -Identity $WorkingOU -Recursive -Confirm:$False -ea 0 -wa 0 -infa 0
@@ -118,7 +118,7 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
     New-ADUser -AccountPassword $securePassword -Company $company -Department $department -DisplayName $displayName -EmailAddress "$sAMAccountName@$DNSRoot" -Enabled $AccState -GivenName $Fname -Name $displayName -OfficePhone $phonenumber -Path $WorkingOU -SamAccountName $sAMAccountName -Surname $Lname -Title $title -UserPrincipalName "$sAMAccountName@$DNSRoot"
     Get-ADUser -Filter {Department -eq $department} -Properties Department |  Move-ADObject  -TargetPath "OU=$department,$WorkingOU"
 
-        "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber | $AccState"
+        "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber"
             $i = $i+1
             if ($i -ge $usercount) {
                 Write-Host "AD USER GENERATION COMPLETE!!`n$UserCount AD User accounts created, in the '$OU' OU." -ForegroundColor Green
