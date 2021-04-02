@@ -5,13 +5,13 @@ Hi! The purpose of this repo is to generate a large amount of AD Users for testi
 
 ## How to use
 ```powershell
-iex (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/ADUserGenerator.ps1'); ADUser-Generation -Company 'MyCompany'
+iex (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/ADUserGenerator.ps1'); ADUser-Generation -Company 'MyCompany' -UserCount 300
 ```
 
 ## Available Parameters
-- Company : (Mandatory) This value must be provided!
-- OU : If one is not specified, the default value used is 'Staff'.
-- AreaCode : If one is not specified, the default value used is '727'.
+- Company : This value must be provided
+- OU : If one is not specified, the default value used is 'Staff'
+- AreaCode : If one is not specified, the default vale used is '727'
 - UserCount : If one is not specified, the default value used is 15.
 	- Min value: 1; Max value: 1500
 	- I limited this to 1500, as this was a suitable number for my tests. There is no funcional reason why this could not be made higher if you needed it to be? *- Let me know!?*
@@ -22,7 +22,22 @@ Retrieved from files in this repo, I'll update them from time to time, but not m
  - FirstNames.csv
  - LastNames.csv
 
+## ToDo
+While the code works... it needs work! Here is my list of stuff I plan on adding to it...
 
-Enjoy!
+ - Create a security group for each department
+	 - then, add users to their dept's sec group.
+ - Create a distribution group for each department
+	 - then, add users to their dept's distro group.
+ - Create a security group for each 'position' within each department
+	 - then, add users based on position\dept to those groups.
+ - Create a distribution group for each 'position' within each department
+	 - then, add users based on position\dept to those groups.
+ - Assign Managers to users within departments.
+ - Randomize the enabled\disabled state of the user accounts.
+	 *- Currently, they are all enabled.*
+ - 
 
-://mk
+*Enjoy!!*
+
+*://mk*
