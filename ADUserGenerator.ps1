@@ -17,7 +17,7 @@ function ADUser-Generation {
 
 # Check to see if we are on an Active Directory Server...
 if(!(get-windowsfeature | ?{$_.Name -eq 'AD-Domain-Services' -and $_.Installstate -eq 'Installed'})){
-    Write-Host "This script need to be run on an AD server. No changes have been made!" -ForegroundColor Cyan}
+    Write-Host "This script need to be run on an AD server. No changes have been made." -ForegroundColor Cyan}
         ELSE {
 
 Import-Module ActiveDirectory
