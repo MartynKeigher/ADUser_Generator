@@ -82,7 +82,7 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
                 $displayName = (Get-Culture).TextInfo.ToTitleCase($Fname + " " + $Lname)
                 [string]$firstletter = $Fname.substring(0,1).ToLower()
 
-# User generation : SAMAccountName
+# User generation : sAMAccountName
    [string]$sAMAccountName = $firstletter + $LName.ToLower()
    $userExists = $false
     Try {
