@@ -5,13 +5,13 @@ function ADUser-Generation {
         [string] $Company,
         [parameter(Mandatory=$false,HelpMessage="Please enter the name of the OU you want to place your users. (Default: 'Staff')")] 
         [string] $OU = 'Staff',
-        [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default: '727'")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default: '727')")]
         [ValidateRange(201,989)] 
         [string] $AreaCode = 727,
         [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1500)")] 
         [ValidateRange(1,1500)] 
         [int] $UserCount = 15,
-        [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1'")]
+        [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1')")]
         [String] $Password = 'P@ssw0rd1'
     )
 
