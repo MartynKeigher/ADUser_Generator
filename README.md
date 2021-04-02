@@ -35,8 +35,7 @@ While the code works... it needs work! Here is my list of stuff I plan on adding
 	 - then, add users based on position\dept to those groups.
  - Assign Managers to users within departments.
  - Randomize the enabled\disabled state of the user accounts.
-	 *- Currently, they are all enabled.*
- - 
+	 *- Currently, they are all enabled.* 
 
 *Enjoy!!*
 
