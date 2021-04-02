@@ -4,32 +4,29 @@ function ADUser-Generation {
         [parameter(Mandatory=$true,HelpMessage="Please enter Company name.")] 
         [string] $Company,
         [parameter(Mandatory=$false,HelpMessage="Please enter the name of the OU you want to place your users. (Default: 'Staff')")] 
-        [string] $OU,
+        [string] $OU = 'Staff',
         [parameter(Mandatory=$false,HelpMessage="Please enter a 3 digit area code. (Default: '727'")]
-        [ValidateRange(001,999)] 
-        [string] $AreaCode,
-        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1000)")] 
-        [ValidateRange(1,1000)] 
-        [int] $UserCount,
+        [ValidateRange(100,999)] 
+        [string] $AreaCode = 727,
+        [parameter(Mandatory=$false,HelpMessage="Number of user accounts to generate. (Default:15;Max: 1500)")] 
+        [ValidateRange(1,1500)] 
+        [int] $UserCount = 15,
         [parameter(Mandatory=$false,HelpMessage="Please enter a password for the generated users. (Default: 'P@ssw0rd1'")]
-        [String] $Password
+        [String] $Password = 'P@ssw0rd1'
     )
 
 # Check to see if we are on an Active Directory Server...
 if(!(get-windowsfeature | ?{$_.Name -eq 'AD-Domain-Services' -and $_.Installstate -eq 'Installed'})){
-    Write-Host "This script need to be run on an AD server. No changes have been made." -ForegroundColor Cyan}
+    Write-Host "This script need to be run on an AD server. No changes have been made!" -ForegroundColor Cyan}
         ELSE {
 
 Import-Module ActiveDirectory
 $ADDomain = Get-ADDomain -Current LocalComputer
 $ADRootDN = [string]($ADDomain.DistinguishedName)
 $DNSRoot  = [string]($ADDomain.DNSRoot).Substring($ADDomain.DNSRoot.IndexOf('.') +1)
-
-    if (!($OU)) {$OU = 'Staff'}
-
 $WorkingOU = "OU=$OU,$ADRootDN"
 
-## Delete existing data to make way for new users
+## Delete previous attempt
 Remove-ADOrganizationalUnit -Identity $WorkingOU -Recursive -Confirm:$False -ea 0 -wa 0 -infa 0
 
 
@@ -63,12 +60,9 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
 ##   USER PREP   ##
 ###################
 
-# Define how many users you want to generate
-    if (!($UserCount)) {$UserCount = 15}
-
 # User generation : Names
     $FirstNames = (Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/FirstNames.csv").content | ConvertFrom-Csv -Delim ',' -Header 'FirstName'  
-    $LastNames = (Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/LastNames.csv").content | ConvertFrom-Csv -Delim ',' -Header 'LastName'
+    $LastNames  = (Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/MartynKeigher/ADUser_Generator/main/LastNames.csv").content | ConvertFrom-Csv -Delim ',' -Header 'LastName'
 
     $CSV_Fname = New-Object System.Collections.ArrayList
     $CSV_Lname = New-Object System.Collections.ArrayList
@@ -106,20 +100,13 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
    $title = $departments[$departmentIndex].Positions[$(Get-Random -Minimum 0 -Maximum $departments[$departmentIndex].Positions.Count)]
 
 # User generation : Phone Number
-   if (!($areacode)) {$areacode = '727'}
-   if ($areacode.Length -ne 3){
-        Write-Host "Expecting 3 digits for areacode. Please re-run using 3 digits for the areacode." -ForegroundColor Yellow
-            Exit
-    }
-        ELSE {
-   $pn2 = Get-Random -Minimum 301 -Maximum 980
-   $pn3 = "{0:0000}" -f  (Get-Random -Minimum 100 -Maximum 9999)
+   
+   $pn2 = Get-Random -Minimum 101 -Maximum 995
+   $pn3 = "{0:0000}" -f  (Get-Random -Minimum 50 -Maximum 9995)
    $phonenumber = "($areacode) $pn2-$pn3"
-        }
 
 # User generation : Default Password
-    if (!($Password)) {$Password = 'P@ssw0rd1'}
-        $securePassword = ConvertTo-SecureString -AsPlainText $Password -Force
+   $securePassword = ConvertTo-SecureString -AsPlainText $Password -Force
 
 
 #######################
@@ -127,11 +114,11 @@ NEW-ADOrganizationalUnit 'Staff' -ProtectedFromAccidentalDeletion $False
 #######################
 
 # Generate users
-    $ADAccountState = (Get-Random -InputObject ([bool]$True,[bool]$False))
-    New-ADUser -AccountPassword $securePassword -Company $company -Department $department -DisplayName $displayName -EmailAddress "$sAMAccountName@$DNSRoot" -Enabled $ADAccountState -GivenName $Fname -Name $displayName -OfficePhone $phonenumber -Path $WorkingOU -SamAccountName $sAMAccountName -Surname $Lname -Title $title -UserPrincipalName "$sAMAccountName@$DNSRoot"
+    $AccState = (Get-Random -InputObject ([bool]$True,[bool]$False))
+    New-ADUser -AccountPassword $securePassword -Company $company -Department $department -DisplayName $displayName -EmailAddress "$sAMAccountName@$DNSRoot" -Enabled $AccState -GivenName $Fname -Name $displayName -OfficePhone $phonenumber -Path $WorkingOU -SamAccountName $sAMAccountName -Surname $Lname -Title $title -UserPrincipalName "$sAMAccountName@$DNSRoot"
     Get-ADUser -Filter {Department -eq $department} -Properties Department |  Move-ADObject  -TargetPath "OU=$department,$WorkingOU"
 
-        "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber"
+        "Created user #" + ($i+1) + " | $displayName ($sAMAccountName) | $department | $title | $phonenumber | $AccState"
             $i = $i+1
             if ($i -ge $usercount) {
                 Write-Host "AD USER GENERATION COMPLETE!!`n$UserCount AD User accounts created, in the '$OU' OU." -ForegroundColor Green
