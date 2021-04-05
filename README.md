@@ -1,6 +1,6 @@
 # AD User Generator
 
-Hi! The purpose of this repo is to generate a large amount of AD Users for testing. Feel free to 'fork off' and do and you please with this code! PR's are also very welcomed too, of course!! 
+Hi! The purpose of this repo is to generate a large amount of AD Users for testing. Feel free to 'fork off' and do as you please with this code! PR's are also very welcomed too, of course!! 
 
 
 ## How to use
